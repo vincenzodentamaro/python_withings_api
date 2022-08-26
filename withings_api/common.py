@@ -800,28 +800,4 @@ class UnknownStatusException(StatusException):
 
 def response_body_or_raise(data: Any) -> Dict[str, Any]:
     """Parse withings response or raise exception."""
-    if not isinstance(data, dict):
-        raise UnexpectedTypeException(data, dict)
-
-    parsed_response: Final = cast(dict, data)
-    status: Final = parsed_response.get("status")
-
-    if status is None:
-        raise UnknownStatusException(status=status)
-    if status in STATUS_SUCCESS:
-        return cast(Dict[str, Any], parsed_response.get("body"))
-    if status in STATUS_AUTH_FAILED:
-        raise AuthFailedException(status=status)
-    if status in STATUS_INVALID_PARAMS:
-        raise InvalidParamsException(status=status)
-    if status in STATUS_UNAUTHORIZED:
-        raise UnauthorizedException(status=status)
-    if status in STATUS_ERROR_OCCURRED:
-        raise ErrorOccurredException(status=status)
-    if status in STATUS_TIMEOUT:
-        raise TimeoutException(status=status)
-    if status in STATUS_BAD_STATE:
-        raise BadStateException(status=status)
-    if status in STATUS_TOO_MANY_REQUESTS:
-        raise TooManyRequestsException(status=status)
-    raise UnknownStatusException(status=status)
+    return (data, dict)
