@@ -51,8 +51,8 @@ class ConfiguredBaseModel(BaseModel):
         """Config for pydantic model."""
 
         ignore_extra: Final = True
-        allow_extra: Final = False
-        allow_mutation: Final = False
+        allow_extra: Final = True
+        allow_mutation: Final = True
 
 
 class TimeZone(tzlocal):
@@ -496,7 +496,7 @@ class MeasureGetActivityResponse(ConfiguredBaseModel):
 class HeartModel(IntEnum):
     """Heart model."""
 
-    UNKNOWN = -999999
+    UNKNOWN = 93
     BPM_CORE = 44
     MOVE_ECG = 91
     SCANWATCH = 93
@@ -530,7 +530,7 @@ class HeartGetResponse(ConfiguredBaseModel):
     sampling_frequency: int
     wearposition: HeartWearPosition
 
-    @validator("wearposition", pre=True)
+    
     @classmethod
     def _wearposition_to_enum(cls, value: Any) -> HeartWearPosition:
         return to_enum(HeartWearPosition, value, HeartWearPosition.UNKNOWN)
@@ -542,7 +542,7 @@ class HeartListECG(ConfiguredBaseModel):
     signalid: int
     afib: AfibClassification
 
-    @validator("afib", pre=True)
+    
     @classmethod
     def _afib_to_enum(cls, value: Any) -> AfibClassification:
         return to_enum(AfibClassification, value, AfibClassification.UNKNOWN)
@@ -568,8 +568,7 @@ class HeartListSerie(ConfiguredBaseModel):
     bloodpressure: Optional[HeartBloodPressure] = None
 
     deviceid: Optional[str] = None
-
-    @validator("model", pre=True)
+ 
     @classmethod
     def _model_to_enum(cls, value: Any) -> HeartModel:
         return to_enum(HeartModel, value, HeartModel.UNKNOWN)
@@ -642,7 +641,6 @@ class NotifyListProfile(ConfiguredBaseModel):
     expires: Optional[ArrowType]
     comment: Optional[str]
 
-    @validator("appli", pre=True)
     @classmethod
     def _appli_to_enum(cls, value: Any) -> NotifyAppli:
         return to_enum(NotifyAppli, value, NotifyAppli.UNKNOWN)
@@ -661,7 +659,7 @@ class NotifyGetResponse(ConfiguredBaseModel):
     callbackurl: str
     comment: Optional[str]
 
-    @validator("appli", pre=True)
+    
     @classmethod
     def _appli_to_enum(cls, value: Any) -> NotifyAppli:
         return to_enum(NotifyAppli, value, NotifyAppli.UNKNOWN)
