@@ -276,17 +276,14 @@ class SleepGetSerie(ConfiguredBaseModel):
     rr: Tuple[SleepGetTimestampValue, ...] = ()  # pylint: disable=invalid-name
     snoring: Tuple[SleepGetTimestampValue, ...] = ()
 
-    @validator("hr", pre=True)
     @classmethod
     def _hr_to_tuple(cls, value: Dict[str, int]) -> Tuple:
         return SleepGetSerie._timestamp_value_to_object(value)
 
-    @validator("rr", pre=True)
     @classmethod
     def _rr_to_tuple(cls, value: Dict[str, int]) -> Tuple:
         return SleepGetSerie._timestamp_value_to_object(value)
 
-    @validator("snoring", pre=True)
     @classmethod
     def _snoring_to_tuple(cls, value: Dict[str, int]) -> Tuple:
         return SleepGetSerie._timestamp_value_to_object(value)
@@ -307,7 +304,6 @@ class SleepGetSerie(ConfiguredBaseModel):
 
         return cast(Tuple[SleepGetTimestampValue, ...], value)
 
-    @validator("state", pre=True)
     @classmethod
     def _state_to_enum(cls, value: Any) -> SleepState:
         return to_enum(SleepState, value, SleepState.UNKNOWN)
@@ -361,33 +357,28 @@ class GetSleepSummarySerie(ConfiguredBaseModel):
     data: GetSleepSummaryData
     id: Optional[int] = None
 
-    @validator("startdate")
     @classmethod
     def _set_timezone_on_startdate(
         cls, value: ArrowType, values: Dict[str, Any]
     ) -> Arrow:
         return cast(Arrow, value.to(values["timezone"]))
 
-    @validator("enddate")
     @classmethod
     def _set_timezone_on_enddate(
         cls, value: ArrowType, values: Dict[str, Any]
     ) -> Arrow:
         return cast(Arrow, value.to(values["timezone"]))
 
-    @validator("date")
     @classmethod
     def _set_timezone_on_date(cls, value: ArrowType, values: Dict[str, Any]) -> Arrow:
         return cast(Arrow, value.to(values["timezone"]))
 
-    @validator("modified")
     @classmethod
     def _set_timezone_on_modified(
         cls, value: ArrowType, values: Dict[str, Any]
     ) -> Arrow:
         return cast(Arrow, value.to(values["timezone"]))
 
-    @validator("model", pre=True)
     @classmethod
     def _model_to_enum(cls, value: Any) -> SleepModel:
         return to_enum(SleepModel, value, SleepModel.UNKNOWN)
@@ -408,7 +399,6 @@ class MeasureGetMeasMeasure(ConfiguredBaseModel):
     unit: int
     value: int
 
-    @validator("type", pre=True)
     @classmethod
     def _type_to_enum(cls, value: Any) -> MeasureType:
         return to_enum(MeasureType, value, MeasureType.UNKNOWN)
@@ -425,14 +415,12 @@ class MeasureGetMeasGroup(ConfiguredBaseModel):
     grpid: int
     measures: Tuple[MeasureGetMeasMeasure, ...]
 
-    @validator("attrib", pre=True)
     @classmethod
     def _attrib_to_enum(cls, value: Any) -> MeasureGetMeasGroupAttrib:
         return to_enum(
             MeasureGetMeasGroupAttrib, value, MeasureGetMeasGroupAttrib.UNKNOWN
         )
 
-    @validator("category", pre=True)
     @classmethod
     def _category_to_enum(cls, value: Any) -> MeasureGetMeasGroupCategory:
         return to_enum(
@@ -449,7 +437,6 @@ class MeasureGetMeasResponse(ConfiguredBaseModel):
     timezone: TimeZone
     updatetime: ArrowType
 
-    @validator("updatetime")
     @classmethod
     def _set_timezone_on_updatetime(
         cls, value: ArrowType, values: Dict[str, Any]
